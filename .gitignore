@@ -4,7 +4,9 @@
 *.pdb
 
 # env file
-.env
+.env.development
+.env.production
+
 
 # Editor/IDE
 # .idea/
