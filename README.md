@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="brandings/lockup-dark.svg">
-    <img src="brandings/lockup-light.svg" alt="Silo Engine" width="400">
+    <img src="brandings/lockup-light.svg" alt="Silo Engine" width="800">
   </picture>
 </p>
 
@@ -10,7 +10,7 @@
   <sub>Rust · Axum · Tokio · PostgreSQL · RAID-backed storage</sub>
 </p>
 
-------------------------------------------------------------------------
+---
 
 Silo Engine is Sharpnr's self-hosted infrastructure service for **file
 storage, database provisioning, and storage-related resources**.
@@ -24,24 +24,24 @@ physical storage directly.
 
 Silo is intended to provide an API through which Sharpnr services can:
 
--   Upload and store files
--   Retrieve files
--   Delete files
--   Organize files by organization, employee, and folder
--   Provision PostgreSQL databases
--   Manage database credentials and connection information
--   Track storage and infrastructure metadata
--   Authenticate requests from trusted Sharpnr services
+- Upload and store files
+- Retrieve files
+- Delete files
+- Organize files by organization, employee, and folder
+- Provision PostgreSQL databases
+- Manage database credentials and connection information
+- Track storage and infrastructure metadata
+- Authenticate requests from trusted Sharpnr services
 
 A typical file URL will eventually look like:
 
-``` text
+```text
 https://cdn.sharpnr.com/{org_id}/{employee_id}/{folder}/{filename}
 ```
 
 For example:
 
-``` text
+```text
 https://cdn.sharpnr.com/org_123/employee_456/profile/avatar.png
 ```
 
@@ -49,13 +49,13 @@ The CDN hostname is intentionally decoupled from the physical storage
 implementation. Silo is responsible for resolving the requested resource
 and serving it from the configured storage backend.
 
-------------------------------------------------------------------------
+---
 
 ## Architecture
 
 Silo is currently being designed as a standalone Rust service.
 
-``` text
+```text
                          Internet
                             │
                             ▼
@@ -85,15 +85,15 @@ target is self-hosted physical infrastructure.
 
 The current infrastructure includes approximately:
 
--   10 CPUs combined
--   160 GB RAM combined
--   Approximately 1 PB of RAID-backed storage
--   Multiple machines connected through a local network switch
+- 10 CPUs combined
+- 160 GB RAM combined
+- Approximately 1 PB of RAID-backed storage
+- Multiple machines connected through a local network switch
 
 The first version of Silo will run as a normal service, with
 systemd/Nginx used for deployment and traffic routing.
 
-------------------------------------------------------------------------
+---
 
 ## Responsibilities
 
@@ -101,16 +101,16 @@ systemd/Nginx used for deployment and traffic routing.
 
 Silo is responsible for infrastructure-level concerns:
 
--   File storage
--   File metadata
--   Storage paths
--   Storage backends
--   PostgreSQL database provisioning
--   Database credentials
--   Resource lifecycle
--   Storage usage metadata
--   Authentication between Sharpnr services
--   File access control
+- File storage
+- File metadata
+- Storage paths
+- Storage backends
+- PostgreSQL database provisioning
+- Database credentials
+- Resource lifecycle
+- Storage usage metadata
+- Authentication between Sharpnr services
+- File access control
 
 ### Sharpnr Engine owns
 
@@ -118,7 +118,7 @@ Sharpnr Engine remains responsible for application/business data.
 
 For example:
 
-``` text
+```text
 Sharpnr Engine
 │
 ├── Hospitality
@@ -130,19 +130,19 @@ Sharpnr Engine
 Silo provisions and manages infrastructure resources, but it does not
 become the business-domain database layer for Sharpnr.
 
-------------------------------------------------------------------------
+---
 
 ## File Storage Model
 
 A file can be addressed using an organization/resource-oriented path:
 
-``` text
+```text
 /org/{org_id}/{employee_id}/{folder}/{filename}
 ```
 
 Example:
 
-``` text
+```text
 /org_123/employee_456/profile/avatar.png
 ```
 
@@ -151,7 +151,7 @@ filesystem path.
 
 The public path:
 
-``` text
+```text
 cdn.sharpnr.com/org_123/employee_456/profile/avatar.png
 ```
 
@@ -161,7 +161,7 @@ object.
 This allows the physical storage implementation to change without
 changing public URLs.
 
-------------------------------------------------------------------------
+---
 
 ## Storage Abstraction
 
@@ -170,7 +170,7 @@ directly to one storage technology.
 
 Conceptually:
 
-``` text
+```text
 StorageBackend
 │
 ├── LocalRaidStorage
@@ -187,7 +187,7 @@ storage implementation.
 
 For example:
 
-``` rust
+```rust
 pub trait StorageBackend {
     async fn put(&self, key: &str, data: &[u8]) -> Result<(), SiloError>;
 
@@ -200,7 +200,7 @@ pub trait StorageBackend {
 The exact API may evolve as streaming and large-file support are
 implemented.
 
-------------------------------------------------------------------------
+---
 
 ## Database Provisioning
 
@@ -209,7 +209,7 @@ applications.
 
 Conceptually:
 
-``` text
+```text
 Sharpnr Engine
        │
        │ create database
@@ -226,7 +226,7 @@ Silo Engine
 
 The resulting information may include:
 
-``` text
+```text
 Host
 Port
 Database
@@ -238,7 +238,7 @@ Connection URL
 The database itself belongs to the consuming application. Silo is
 responsible for provisioning and managing the infrastructure resource.
 
-------------------------------------------------------------------------
+---
 
 ## Authentication
 
@@ -249,7 +249,7 @@ Trusted Sharpnr services will authenticate with Silo.
 
 For example:
 
-``` text
+```text
 Sharpnr Engine
       │
       │ authenticated request
@@ -262,28 +262,28 @@ concerns.
 
 The eventual API design will distinguish between:
 
-``` text
+```text
 Public / CDN access
 Internal service-to-service access
 Administrative operations
 ```
 
-------------------------------------------------------------------------
+---
 
 ## API
 
 Silo uses:
 
--   Rust
--   Axum
--   Tokio
--   OpenAPI
--   Swagger UI
--   ReDoc
+- Rust
+- Axum
+- Tokio
+- OpenAPI
+- Swagger UI
+- ReDoc
 
 API documentation will be exposed through:
 
-``` text
+```text
 /swagger-ui
 /redoc
 /v1/openapi.json
@@ -292,7 +292,7 @@ API documentation will be exposed through:
 The OpenAPI document is intended to become the contract between Silo and
 consuming Sharpnr services.
 
-------------------------------------------------------------------------
+---
 
 ## Configuration
 
@@ -302,7 +302,7 @@ startup, inside the `config` module — nothing else in the crate touches
 
 The configuration is organized into settings groups:
 
-``` text
+```text
 EngineConfig
 ├── HostSettings        implemented
 ├── DatabaseSettings    planned
@@ -312,7 +312,7 @@ EngineConfig
 
 Usage looks like:
 
-``` rust
+```rust
 let config = EngineConfig::from_env()?;
 
 config.app_env;          // "development" | "production" | ...
@@ -323,9 +323,9 @@ config.host.bind_addr(); // SocketAddr for the listener
 ### Environment selection
 
 `APP_ENV` selects which env file is loaded, so it is read from the
-process environment *before* any file exists:
+process environment _before_ any file exists:
 
-``` bash
+```bash
 cargo run                     # loads .env.development
 APP_ENV=production cargo run  # loads .env.production
 ```
@@ -336,14 +336,14 @@ is only a warning — the app then reads the process environment instead.
 Required variables are validated at startup, and a bad value stops the
 process with a message naming the variable rather than a panic:
 
-``` text
+```text
 configuration error: SILO_ENGINE_PORT must be set (see .env.example)
 configuration error: SILO_ENGINE_PORT=99999 is invalid: not a valid port number
 ```
 
 Example `.env.development`:
 
-``` env
+```env
 APP_ENV=development
 SILO_ENGINE_PORT=9254
 SHARPNR_ENGINE_PORT=8080
@@ -351,7 +351,7 @@ SHARPNR_ENGINE_PORT=8080
 
 Planned variables, as their settings groups land:
 
-``` env
+```env
 DATABASE_URL=postgres://silo:silo@localhost:5432/silo
 DATABASE_MAX_CONNECTIONS=20
 
@@ -364,13 +364,13 @@ AUTH_SERVICE_TOKEN=development-token
 `.env.development` and `.env.production` are gitignored. `.env.example`
 is the committed template and should never hold real credentials.
 
-------------------------------------------------------------------------
+---
 
 ## Project Structure
 
 The project is being organized around clear application boundaries:
 
-``` text
+```text
 silo-engine/
 ├── Cargo.toml
 ├── README.md
@@ -417,7 +417,7 @@ silo-engine/
 
 The architecture intentionally favors:
 
-``` text
+```text
 Controller
     ↓
 Service
@@ -428,7 +428,7 @@ Infrastructure
 A repository layer is not required for every service. It will only be
 introduced where it provides a meaningful abstraction.
 
-------------------------------------------------------------------------
+---
 
 ## Dependency Injection
 
@@ -440,7 +440,7 @@ services.
 
 Conceptually:
 
-``` text
+```text
 main.rs
    │
    ├── EngineConfig
@@ -465,7 +465,7 @@ Rust traits will be used where abstraction is useful, particularly for
 infrastructure components such as storage backends and database
 provisioners.
 
-------------------------------------------------------------------------
+---
 
 ## Error Handling
 
@@ -473,7 +473,7 @@ Silo will use structured application errors.
 
 The intended model is:
 
-``` text
+```text
 SiloError
 ├── Configuration
 ├── Database
@@ -485,14 +485,14 @@ SiloError
 
 Functions that can fail will generally return:
 
-``` rust
+```rust
 Result<T, SiloError>
 ```
 
 The `?` operator will be used to propagate errors through service
 layers.
 
-------------------------------------------------------------------------
+---
 
 ## Concurrency
 
@@ -500,7 +500,7 @@ Silo is an asynchronous Rust service built on Tokio.
 
 The primary concurrency model is:
 
-``` text
+```text
 Axum
   ↓
 Tokio Runtime
@@ -513,13 +513,13 @@ Silo will not manually create an OS thread for every HTTP request.
 For blocking or CPU-heavy work, Tokio's blocking facilities or dedicated
 worker mechanisms can be used where appropriate.
 
-------------------------------------------------------------------------
+---
 
 ## Deployment
 
 The initial deployment model is intentionally simple:
 
-``` text
+```text
 systemd
    │
    ▼
@@ -532,7 +532,7 @@ silo-engine
 
 Nginx can sit in front of Silo:
 
-``` text
+```text
 cdn.sharpnr.com
         │
         ▼
@@ -548,60 +548,60 @@ production `9255`, so both can run on one machine.
 Container orchestration and Kubernetes are intentionally out of scope
 for the initial implementation.
 
-------------------------------------------------------------------------
+---
 
 ## Development
 
 Check Rust:
 
-``` bash
+```bash
 rustc --version
 cargo --version
 ```
 
 Check installed Rust toolchains:
 
-``` bash
+```bash
 rustup toolchain list
 ```
 
 Run the application:
 
-``` bash
+```bash
 cargo run
 ```
 
 Build:
 
-``` bash
+```bash
 cargo build
 ```
 
 Run tests:
 
-``` bash
+```bash
 cargo test
 ```
 
 Check the project without producing a final binary:
 
-``` bash
+```bash
 cargo check
 ```
 
 Format code:
 
-``` bash
+```bash
 cargo fmt
 ```
 
 Run Clippy:
 
-``` bash
+```bash
 cargo clippy
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Design Principles
 
@@ -620,7 +620,7 @@ Silo follows a few core principles:
 10. **Distributed infrastructure should be introduced only when it is
     actually needed.**
 
-------------------------------------------------------------------------
+---
 
 ## Current Status
 
@@ -629,19 +629,19 @@ phase.
 
 Current foundations include:
 
--   Rust toolchain
--   Cargo project
--   Configuration module
--   Environment-based configuration
--   Axum/Tokio direction
--   OpenAPI documentation direction
--   Dependency injection architecture
--   Storage abstraction design
--   PostgreSQL provisioning design
+- Rust toolchain
+- Cargo project
+- Configuration module
+- Environment-based configuration
+- Axum/Tokio direction
+- OpenAPI documentation direction
+- Dependency injection architecture
+- Storage abstraction design
+- PostgreSQL provisioning design
 
 The next implementation milestones are:
 
-``` text
+```text
 Configuration
       ↓
 Axum server
@@ -663,7 +663,7 @@ Database provisioning
 CDN integration
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Name
 
