@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 800" width="2400" height="800">
+  <rect width="2400" height="800" fill="#0C0D0F"></rect>
+  <g transform="translate(864, 231.99999999999997) scale(3.36)">
+  <g transform="translate(13,0) skewX(-14)">
+    <rect x="0" y="6" width="86" height="22" fill="#FFFFFF"></rect>
+    <rect x="14" y="39" width="72" height="22" fill="#5A66F0"></rect>
+    <rect x="0" y="72" width="86" height="22" fill="#FFFFFF"></rect>
+  </g>
+  </g>
+  <text x="1264" y="400" dominant-baseline="middle" font-family="Space Grotesk, Helvetica Neue, Arial, sans-serif" font-weight="600" font-size="208" letter-spacing="-7.199999999999999" fill="#FFFFFF">Silo-Engine</text>
+</svg>
