@@ -1,7 +1,7 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="brandings/lockup-dark.svg">
-    <img src="brandings/lockup-light.svg" alt="Silo Engine" width="800">
+    <source media="(prefers-color-scheme: dark)" srcset="brandings/banners/twitter-header-1500x500.png">
+    <img src="brandings/banners/twitter-header-1500x500.png" alt="Silo Engine" width="1000">
   </picture>
 </p>
 
